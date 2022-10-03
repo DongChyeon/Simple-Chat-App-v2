@@ -37,7 +37,8 @@
             android:hint="UserID"
             android:inputType="textEmailAddress"
             android:padding="@dimen/spacing_m"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="normal" />
 
         <EditText
             android:id="@+id/pw_edit"
@@ -47,7 +48,8 @@
             android:hint="Password"
             android:inputType="textPassword"
             android:padding="@dimen/spacing_m"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="normal" />
     </LinearLayout>
 
     <LinearLayout
@@ -66,14 +68,16 @@
             android:layout_marginEnd="@dimen/spacing_xs"
             android:layout_marginRight="@dimen/spacing_xs"
             android:text="회원가입"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="normal" />
 
         <Button
             android:id="@+id/login_btn"
             android:layout_width="144dp"
             android:layout_height="56dp"
             android:text="로그인"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="normal" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

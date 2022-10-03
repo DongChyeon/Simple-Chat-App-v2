@@ -2,7 +2,7 @@ package com.dongchyeon.simplechatapp_v2.retrofit.dto.response
 
 import com.google.gson.annotations.SerializedName
 
-data class LoginResponseDto (
+data class LoginResDto (
     @SerializedName("token")
     val token : String
 )

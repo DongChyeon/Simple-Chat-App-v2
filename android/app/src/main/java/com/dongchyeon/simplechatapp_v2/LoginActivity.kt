@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import com.dongchyeon.simplechatapp_v2.databinding.ActivityLoginBinding
 import com.dongchyeon.simplechatapp_v2.retrofit.RetrofitClient
-import com.dongchyeon.simplechatapp_v2.retrofit.dto.request.LoginRequestDto
-import com.dongchyeon.simplechatapp_v2.retrofit.dto.response.LoginResponseDto
+import com.dongchyeon.simplechatapp_v2.retrofit.dto.request.LoginReqDto
+import com.dongchyeon.simplechatapp_v2.retrofit.dto.response.LoginResDto
 import com.dongchyeon.simplechatapp_v2.retrofit.service.LoginService
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,16 +24,16 @@ class LoginActivity : AppCompatActivity() {
         val retrofitClient = RetrofitClient.getInstance().create(LoginService::class.java)
 
         binding.loginBtn.setOnClickListener {
-            val loginRequestDto = LoginRequestDto(binding.idEdit.text.toString(), binding.pwEdit.text.toString())
+            val loginReqDto = LoginReqDto(binding.idEdit.text.toString(), binding.pwEdit.text.toString())
 
-            retrofitClient.login(loginRequestDto).enqueue(object : Callback<LoginResponseDto> {
-                override fun onResponse(call : Call<LoginResponseDto>, response : Response<LoginResponseDto>) {
+            retrofitClient.login(loginReqDto).enqueue(object : Callback<LoginResDto> {
+                override fun onResponse(call : Call<LoginResDto>, response : Response<LoginResDto>) {
                     if (response.isSuccessful) Log.d("login", response.body().toString())
                     else if (response.code() == 401) Log.d("login", "로그인에 실패했습니다.");
                     else Log.d("login", "로그인에 실패했습니다.")
                 }
 
-                override fun onFailure(call : Call<LoginResponseDto>, t: Throwable) {
+                override fun onFailure(call : Call<LoginResDto>, t: Throwable) {
                     Log.d("login", t.toString())
                 }
             })
