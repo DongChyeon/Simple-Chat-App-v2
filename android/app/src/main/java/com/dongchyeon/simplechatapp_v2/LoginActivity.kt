@@ -1,5 +1,6 @@
 package com.dongchyeon.simplechatapp_v2
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -37,6 +38,10 @@ class LoginActivity : AppCompatActivity() {
                     Log.d("login", t.toString())
                 }
             })
+        }
+
+        binding.signupBtn.setOnClickListener {
+            startActivity(Intent(this, SignupActivity::class.java))
         }
     }
 }

@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/logo">
 
         <EditText
-            android:id="@+id/id_edit"
+            android:id="@+id/idEdit"
             android:layout_width="296dp"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -41,7 +41,7 @@
             android:textStyle="normal" />
 
         <EditText
-            android:id="@+id/pw_edit"
+            android:id="@+id/pwEdit"
             android:layout_width="296dp"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -62,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <Button
-            android:id="@+id/register_btn"
+            android:id="@+id/signupBtn"
             android:layout_width="144dp"
             android:layout_height="56dp"
             android:layout_marginEnd="@dimen/spacing_xs"
@@ -72,7 +72,7 @@
             android:textStyle="normal" />
 
         <Button
-            android:id="@+id/login_btn"
+            android:id="@+id/loginBtn"
             android:layout_width="144dp"
             android:layout_height="56dp"
             android:text="로그인"
