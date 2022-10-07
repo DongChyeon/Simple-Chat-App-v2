@@ -1,4 +1,5 @@
-import { login, signup } from '../controllers/user_controller.js'
+import { login, signup } from '../controllers/user_controller.js';
+import { uploadProfileImg } from '../middlewares/multer_middleware.js';
 
 const route_loader = { };
 
@@ -7,8 +8,8 @@ route_loader.init = (app, router) => {
 };
 
 function initRoutes(app, router) {
-    router.route('/user/login').post(login);
-    router.route('/user/signup').post(signup);
+    router.post('/user/login', login);
+    router.post('/user/signup', uploadProfileImg.single('profile_img'), signup);
 
     app.use('/', router);
 }

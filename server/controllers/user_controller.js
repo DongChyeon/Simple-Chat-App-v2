@@ -15,7 +15,7 @@ export const login = async (req, res) => {
 };
 
 const authUser = async (id, password) => {
-    var user = await user_model.findOne({ id : id }).exec();;
+    var user = await user_model.findOne({ id : id }).exec();
     
     if (user) {
         var authenticated = await authenticate(user, password);
@@ -36,22 +36,32 @@ export const signup = async (req, res) => {
     var id = req.body.id;
     var password = req.body.password;
     var name = req.body.name;
+    var profile_img = req.file.path;
 
     var salt = await createSalt();
     var hashed_password = await createHashedPassword(password, salt);
 
-    var user = user_model({'id' : id, 'hashed_password' : hashed_password, 'name' : name, 'salt' : salt });
-    await user.save();
-    
-    if (user) {
-        console.log('사용자 추가 성공');
-        res.status(201).json({ result : 1 });
+    // 아이디 중복 체크
+    var dupId = await user_model.findOne({ id : id }).exec();
+    if (dupId) {
+        console.log('아이디가 중복입니다.');
+        res.status(409).json({ message : '아이디가 중복입니다. 다른 아이디를 설정해주세요.' });
+    // 중복된 아이디가 아닐 시 회원가입 실행
     } else {
-        console.log('사용자 추가 실패');
-        res.status(400).json({ result : 0 });
+        var user = user_model({'id' : id, 'hashed_password' : hashed_password, 'name' : name, 'salt' : salt, 'profile_img' : profile_img });
+        await user.save();
+        
+        if (user) {
+            console.log('사용자 추가 성공');
+            res.status(201).json({ message : '사용자 추가에 성공했습니다.' });
+        } else {
+            console.log('사용자 추가 실패');
+            res.status(400).json({ message : '사용자 추가에 실패했습니다.' });
+        }
     }
 };
 
+// 비밀번호 암호화에 필요한 salt
 const createSalt = async () => {
     return await new Promise((resolve, reject) => {
         crypto.randomBytes(64, (err, buf) => {
@@ -61,6 +71,7 @@ const createSalt = async () => {
     });
 };
 
+// 비밀번호 복호화
 const createHashedPassword = async (plainPassword, salt) => {
     return await new Promise((resolve, reject) => {
         crypto.pbkdf2(plainPassword, salt, 4096, 64, 'sha512', (err, key) => {
@@ -70,9 +81,14 @@ const createHashedPassword = async (plainPassword, salt) => {
     });
 };
 
+
+// 비밀번호 비교를 통해 같은 유저인지 검증
 const authenticate = async (user, plainPassword) => {
     var hashed_password = await createHashedPassword(plainPassword, user.salt);
 
-    if (hashed_password == user.hashed_password) return true;
-    else return false;
+    if (hashed_password == user.hashed_password) {
+        return true;
+    } else {
+        return false;
+    }
 };
