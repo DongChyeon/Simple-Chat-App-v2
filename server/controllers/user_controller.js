@@ -8,9 +8,9 @@ export const login = async (req, res) => {
     var user = await authUser(id, password);
 
     if (user) {
-        res.status(200).json({ 'token' : 'token' });
+        res.status(200).json({ 'token' : 'token', 'message' : '로그인에 성공했습니다.' });
     } else {
-        res.status(401).json({ 'token' : '' });
+        res.status(401).json({ 'token' : '', 'message' : '로그인에 실패했습니다.' });
     }
 };
 
