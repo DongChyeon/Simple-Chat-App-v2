@@ -65,8 +65,8 @@
             android:id="@+id/signupBtn"
             android:layout_width="144dp"
             android:layout_height="56dp"
-            android:layout_marginEnd="@dimen/spacing_xs"
-            android:layout_marginRight="@dimen/spacing_xs"
+            android:layout_marginEnd="@dimen/spacing_s"
+            android:layout_marginRight="@dimen/spacing_s"
             android:text="회원가입"
             android:textSize="18sp"
             android:textStyle="normal" />
