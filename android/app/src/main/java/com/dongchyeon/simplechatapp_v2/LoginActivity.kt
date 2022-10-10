@@ -10,7 +10,9 @@ import com.dongchyeon.simplechatapp_v2.databinding.ActivityLoginBinding
 import com.dongchyeon.simplechatapp_v2.retrofit.RetrofitClient
 import com.dongchyeon.simplechatapp_v2.retrofit.dto.request.LoginReqDto
 import com.dongchyeon.simplechatapp_v2.retrofit.dto.response.LoginResDto
+import com.dongchyeon.simplechatapp_v2.retrofit.dto.response.SignupResDto
 import com.dongchyeon.simplechatapp_v2.retrofit.service.LoginService
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,12 +42,12 @@ class LoginActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d("login", response.body().toString())
-                    } else if (response.code() == 401) {
-                        Log.d("login", "로그인에 실패했습니다.")
-                    } else if (response.code() == 409) {
-                        Log.d("login", "로그인에 실패했습니다.")
+                        Toast.makeText(applicationContext, response.body()!!.message, Toast.LENGTH_LONG).show()
+                    } else {
+                        val loginErrorDto = Gson().fromJson(response.errorBody()?.string()!!, LoginResDto::class.java)
+                        Log.d("login", loginErrorDto.message)
+                        Toast.makeText(applicationContext, loginErrorDto.message, Toast.LENGTH_LONG).show()
                     }
-                    Toast.makeText(applicationContext, response.body()!!.message, Toast.LENGTH_LONG).show()
                 }
 
                 override fun onFailure(call : Call<LoginResDto>, t: Throwable) {

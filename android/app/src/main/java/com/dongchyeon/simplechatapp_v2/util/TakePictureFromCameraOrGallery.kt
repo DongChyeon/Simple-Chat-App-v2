@@ -1,8 +1,7 @@
-package com.dongchyeon.simplechatapp_v2.util
-
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -10,23 +9,35 @@ import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.content.FileProvider
 import com.dongchyeon.simplechatapp_v2.BuildConfig
+import com.dongchyeon.simplechatapp_v2.util.RealPathUtil.getRealPathFromURI_API19
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TakePictureFromCameraOrGallery : ActivityResultContract<Unit, Uri?>() {
-    private var photoUri : Uri? = null
+class TakePictureFromCameraOrGallery : ActivityResultContract<Unit, String?>() {
+    private lateinit var photoFile : File
+    private lateinit var photoUri : Uri
+
+    private lateinit var ctx : Context  // scanFile 메소드를 쓰기위한 컨텍스트 변수
 
     override fun createIntent(context: Context, input: Unit): Intent {
+        ctx = context
         return openImageIntent(context)
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
+    override fun parseResult(resultCode: Int, intent: Intent?): String? {
         if (resultCode != Activity.RESULT_OK) return null
-        return intent?.data
+
+        if (intent?.data == null) {
+            scanFile(ctx, photoFile)
+
+            return photoFile.absolutePath
+        } else {
+            return getRealPathFromURI_API19(ctx, intent.data!!)
+        } // 갤러리에서 선택한 intent.data 가 비어있으면 카메라로 찍어서 얻은 파일경로를 반환
     }
 
-    private fun openImageIntent(context : Context) : Intent {
+    private fun openImageIntent(context: Context): Intent {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         photoUri = getUriFromTakenPhoto(context)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
@@ -34,12 +45,11 @@ class TakePictureFromCameraOrGallery : ActivityResultContract<Unit, Uri?>() {
         val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
         galleryIntent.type = "image/*"
 
+        val intentList = arrayListOf<Intent>()
+
         val packageManger = context.packageManager
-
-        cameraIntent.component = cameraIntent.resolveActivity(packageManger)
-        galleryIntent.component = galleryIntent.resolveActivity(packageManger)
-
-        val intentList = arrayListOf<Intent>(cameraIntent, galleryIntent)
+        if (cameraIntent.resolveActivity(packageManger) != null) intentList.add(cameraIntent)
+        if (galleryIntent.resolveActivity(packageManger) != null) intentList.add(galleryIntent)
 
         val chooser = Intent.createChooser(galleryIntent, "이미지를 불러올 앱을 선택해주세요.")
         chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toTypedArray())
@@ -47,24 +57,32 @@ class TakePictureFromCameraOrGallery : ActivityResultContract<Unit, Uri?>() {
         return chooser
     }
 
-    private fun createFile(context : Context) : File {
+    private fun createPhoto(context: Context): File {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.KOREA).format(Date())
-        val imageFileName = "IMG_" + timeStamp + "_"
-        val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: throw IllegalStateException("Dir not found")
-        return File.createTempFile(
-            imageFileName,
-            ".jpg",
-            storageDir
-        )
+        val imageFileName = "IMG_$timeStamp.jpg"
+        val storageDir =
+            File(Environment.getExternalStorageDirectory().toString() + "/Pictures/SimpleChat")
+        if (!storageDir.exists()) storageDir.mkdirs()
+
+        return File(storageDir, imageFileName)
     }
 
-    private fun getUriFromTakenPhoto(context : Context) : Uri {
-        val file = createFile(context)
+    private fun getUriFromTakenPhoto(context: Context): Uri {
+        photoFile = createPhoto(context)
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
+            FileProvider.getUriForFile(
+                context,
+                BuildConfig.APPLICATION_ID + ".fileProvider",
+                photoFile
+            )
         } else {
-            Uri.fromFile(file)
+            Uri.fromFile(photoFile)
         }
+    }
+
+    private fun scanFile(context : Context, file : File) {
+        MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), null
+        ) { path, uri -> photoUri = uri }
     }
 }
