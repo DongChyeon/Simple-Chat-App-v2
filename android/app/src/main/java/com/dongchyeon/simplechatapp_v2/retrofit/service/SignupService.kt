@@ -13,7 +13,7 @@ interface SignupService {
     @Multipart
     @POST("/user/signup")
     fun signup(
-        @PartMap data : HashMap<String, RequestBody>,
-        @Part profile_img : MultipartBody.Part
-    ) : Call<SignupResDto>
+        @PartMap data: HashMap<String, RequestBody>,
+        @Part profile_img: MultipartBody.Part
+    ): Call<SignupResDto>
 }

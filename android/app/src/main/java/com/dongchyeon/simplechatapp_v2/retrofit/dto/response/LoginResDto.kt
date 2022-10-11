@@ -2,9 +2,9 @@ package com.dongchyeon.simplechatapp_v2.retrofit.dto.response
 
 import com.google.gson.annotations.SerializedName
 
-data class LoginResDto (
+data class LoginResDto(
     @SerializedName("token")
-    val token : String,
+    val token: String,
     @SerializedName("message")
-    val message : String
+    val message: String
 )

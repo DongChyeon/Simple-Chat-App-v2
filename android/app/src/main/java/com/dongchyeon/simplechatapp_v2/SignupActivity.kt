@@ -27,7 +27,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignupBinding
     private lateinit var profileImgPath : String
     // 이미지를 카메라 또는 앨범에서 가져와 이미지뷰에 표시
-    private val getImageContent = registerForActivityResult(TakePictureFromCameraOrGallery()) { result: String? ->
+    private val getImageContent = registerForActivityResult(TakePictureFromCameraOrGallery()) { result : String? ->
         if (result != null) {
             profileImgPath = result
             Glide

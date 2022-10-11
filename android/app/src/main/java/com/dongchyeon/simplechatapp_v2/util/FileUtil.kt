@@ -89,7 +89,8 @@ object RealPathUtil {
             else if (isDownloadsDocument(uri)) {
                 val fileName = getFilePath(context, uri)
                 if (fileName != null) {
-                    return Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName
+                    return Environment.getExternalStorageDirectory()
+                        .toString() + "/Download/" + fileName
                 }
 
                 val id = DocumentsContract.getDocumentId(uri)
