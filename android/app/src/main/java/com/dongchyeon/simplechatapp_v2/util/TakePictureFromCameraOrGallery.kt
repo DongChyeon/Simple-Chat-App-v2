@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import com.dongchyeon.simplechatapp_v2.BuildConfig
 import com.dongchyeon.simplechatapp_v2.util.RealPathUtil.getRealPathFromURI_API19
@@ -20,12 +21,13 @@ class TakePictureFromCameraOrGallery : ActivityResultContract<Unit, String?>() {
 
     private lateinit var ctx : Context  // scanFile 메소드를 쓰기위한 컨텍스트 변수
 
-    override fun createIntent(context: Context, input: Unit): Intent {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun createIntent(context: Context, input: Unit) : Intent {
         ctx = context
         return openImageIntent(context)
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): String? {
+    override fun parseResult(resultCode: Int, intent: Intent?) : String? {
         if (resultCode != Activity.RESULT_OK) return null
 
         if (intent?.data == null) {
@@ -37,12 +39,13 @@ class TakePictureFromCameraOrGallery : ActivityResultContract<Unit, String?>() {
         } // 갤러리에서 선택한 intent.data 가 비어있으면 카메라로 찍어서 얻은 파일경로를 반환
     }
 
-    private fun openImageIntent(context: Context): Intent {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun openImageIntent(context: Context) : Intent {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         photoUri = getUriFromTakenPhoto(context)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
 
-        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
+        val galleryIntent = Intent(MediaStore.ACTION_PICK_IMAGES)
         galleryIntent.type = "image/*"
 
         val intentList = arrayListOf<Intent>()
@@ -57,7 +60,7 @@ class TakePictureFromCameraOrGallery : ActivityResultContract<Unit, String?>() {
         return chooser
     }
 
-    private fun createPhoto(context: Context): File {
+    private fun createPhoto(context: Context) : File {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.KOREA).format(Date())
         val imageFileName = "IMG_$timeStamp.jpg"
         val storageDir =
@@ -67,7 +70,7 @@ class TakePictureFromCameraOrGallery : ActivityResultContract<Unit, String?>() {
         return File(storageDir, imageFileName)
     }
 
-    private fun getUriFromTakenPhoto(context: Context): Uri {
+    private fun getUriFromTakenPhoto(context: Context) : Uri {
         photoFile = createPhoto(context)
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
