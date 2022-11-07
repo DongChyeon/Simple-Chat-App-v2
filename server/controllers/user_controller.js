@@ -1,5 +1,8 @@
 import user_model from '../models/user_model.js';
 import crypto from 'crypto';
+import dotenv from 'dotenv';
+import jsonwebtoken from 'jsonwebtoken';
+dotenv.config();
 
 export const login = async (req, res) => {
     var id = req.body.id;
@@ -8,7 +11,24 @@ export const login = async (req, res) => {
     var user = await authUser(id, password);
 
     if (user) {
-        res.status(200).json({ 'token' : 'token', 'message' : '로그인에 성공했습니다.' });
+        try {
+            const token = await new Promise((resolve, reject) => {
+                jsonwebtoken.sign(
+                    { id }, 
+                    process.env.ACCESS_TOKEN_SECRET, 
+                    { expiresIn : '1d' },
+                    (err, token) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(token);
+                    }
+                });
+            });
+            res.status(200).json({ 'token' : token, 'message' : '로그인에 성공했습니다.' });
+        } catch(err) {
+            res.status(401).json({ 'token' : '', 'message' : err });
+        }
     } else {
         res.status(401).json({ 'token' : '', 'message' : '로그인에 실패했습니다.' });
     }
@@ -80,7 +100,6 @@ const createHashedPassword = async (plainPassword, salt) => {
         });
     });
 };
-
 
 // 비밀번호 비교를 통해 같은 유저인지 검증
 const authenticate = async (user, plainPassword) => {
