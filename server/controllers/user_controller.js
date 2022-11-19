@@ -25,11 +25,14 @@ export const login = async (req, res) => {
                     }
                 });
             });
+            console.log(`사용자 로그인 성공 ${id}`);
             res.status(200).json({ 'token' : token, 'message' : '로그인에 성공했습니다.' });
         } catch(err) {
+            console.log('사용자 로그인 에러');
             res.status(401).json({ 'token' : '', 'message' : err });
         }
     } else {
+        console.log('사용자 로그인 실패');
         res.status(401).json({ 'token' : '', 'message' : '로그인에 실패했습니다.' });
     }
 };
@@ -40,7 +43,7 @@ const authUser = async (id, password) => {
     if (user) {
         var authenticated = await authenticate(user, password);
         if (authenticated) {
-            console.log('사용자 인증 성공 id : ' +  id);
+            console.log(`사용자 인증 성공 ${id}`);
             return true;
         } else {
             console.log('사용자 인증 실패 ')
@@ -68,14 +71,14 @@ export const signup = async (req, res) => {
         res.status(409).json({ message : '아이디가 중복입니다. 다른 아이디를 설정해주세요.' });
     // 중복된 아이디가 아닐 시 회원가입 실행
     } else {
-        var user = user_model({'id' : id, 'hashed_password' : hashed_password, 'name' : name, 'salt' : salt, 'profile_img' : profile_img });
+        var user = user_model({ 'id' : id, 'hashed_password' : hashed_password, 'name' : name, 'salt' : salt, 'profile_img' : profile_img });
         await user.save();
         
         if (user) {
-            console.log('사용자 추가 성공');
+            console.log(`사용자 ${user.id} 추가 성공`);
             res.status(201).json({ message : '사용자 추가에 성공했습니다.' });
         } else {
-            console.log('사용자 추가 실패');
+            console.log(`사용자 ${user.id} 추가 실패`);
             res.status(400).json({ message : '사용자 추가에 실패했습니다.' });
         }
     }
