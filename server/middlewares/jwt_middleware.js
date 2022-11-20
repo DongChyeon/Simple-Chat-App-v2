@@ -2,10 +2,10 @@ import jsonwebtoken from 'jsonwebtoken';
 dotenv.config();
 
 export const verifyToken = async (req, res, next) => {
-    const token = req.header('token');
+    const token = req.headers['authorization'];
 
     if (token == null) {
-        res.status(403).json({ message : '사용자 인증 실패' });
+        return res.status(403).json({ message : '사용자 인증 실패' });
     } else {
         try {
             const tokenInfo = await new Promise((resolve, reject) => {
@@ -20,8 +20,8 @@ export const verifyToken = async (req, res, next) => {
             });
             req.tokenInfo = tokenInfo;
             next();
-        } catch(err) {
-            res.status(403).json({ message : '사용자 인증 실패' });
+        } catch (err) {
+            return res.status(403).json({ message : '사용자 인증 실패' });
         }
     }
 };

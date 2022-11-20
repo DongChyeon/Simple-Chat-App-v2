@@ -1,12 +1,33 @@
 import mongoose from 'mongoose';
 
-var userSchema = new mongoose.Schema({
-    id : { type : String, required : true, unique : true },
+const userSchema = new mongoose.Schema({
+    uid : { type : String, required : true, unique : true },
     hashed_password : { type : String, required : true },
     name : { type : String, required : true },
     profile_img : { type : String, required : true },   // 이미지가 아닌 서버상의 이미지 경로를 저장
     salt : { type : String, required : true }
-});
+}, {
+    timestamps : true,
+    collection : 'users'
+})
+
+userSchema.statics.createUser = async function (id, hashed_password, name, profile_img, salt) {
+    try {
+        const user = await this.create({ 'uid' : id, 'hashed_password' : hashed_password, 'name' : name, 'profile_img' : profile_img, 'salt' : salt });
+        return user;
+    } catch (err) {
+        throw err;
+    }
+}
+
+userSchema.statics.getUserById = async function (id) {
+    try {
+        const user = await this.findOne({ uid : id });
+        return user;
+    } catch (err) {
+        throw err;
+    }
+}
 
 const user_model = mongoose.model('user', userSchema);
 

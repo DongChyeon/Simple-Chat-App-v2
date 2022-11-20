@@ -1,5 +1,5 @@
 import { login, signup } from '../controllers/user_controller.js';
-import { createRoom, enterRoom, leaveRoom, getRoomList } from '../controllers/room_controller.js';
+import { createRoom, enterRoom, leaveRoom, getAllRooms, getRoomsByUid } from '../controllers/room_controller.js';
 import { uploadProfileImg, uploadRoomImg } from '../middlewares/multer_middleware.js';
 
 const route_loader = { };
@@ -12,9 +12,10 @@ function initRoutes(app, router) {
     router.post('/user/login', login);
     router.post('/user/signup', uploadProfileImg.single('profile_img'), signup);
     router.post('/room', uploadRoomImg.single('room_img'), createRoom);
-    router.put('/room/:room_id/enter/:user_id', enterRoom);
-    router.put('/room/:room_id/leave/:user_id', leaveRoom);
-    router.get('/rooms', getRoomList);
+    router.put('/room/:id/enter/:uid', enterRoom);
+    router.put('/room/:id/leave/:uid', leaveRoom);
+    router.get('/rooms', getAllRooms);
+    router.get('/rooms/:uid', getRoomsByUid);
 
     app.use('/', router);
 }
