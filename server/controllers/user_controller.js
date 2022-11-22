@@ -19,7 +19,7 @@ export const login = async (req, res) => {
             return res.status(401).json({ 'token' : '', 'message' : '로그인에 실패했습니다.' });
         }
     } catch (err) {
-        console.log('사용자 로그인 에러', err);
+        console.log(err);
         return res.status(500).json({ 'token' : '', 'message' : err });
     } 
 }
@@ -41,7 +41,7 @@ const authUser = async (id, password) => {
             return false;
         }
     } catch (err) {
-        console.log('사용자 인증 에러', err);
+        console.log(err);
         return false;
     }
 }
@@ -100,23 +100,51 @@ export const signup = async (req, res) => {
         const salt = await createSalt();
         const hashed_password = await encryptPassword(password, salt);
 
-        const user = await user_model.createUser(id, hashed_password, name, profile_img, salt);
-        console.log(`사용자 ${user.uid} 추가 성공`);
-        return res.status(201).json({ message : '사용자 추가에 성공했습니다.' });
-
-        /*
-        const dupUser = await user_model.findById(id);
+        const dupUser = await user_model.getUserById(id);
         if (dupUser) {
             console.log(`사용자 id ${dupUser.uid} 가 중복입니다.`);
-            return res.status(409).json({ message : '아이디가 중복입니다. 다른 아이디를 설정해주세요.' });
+            return res.status(409).json({ 'message' : '아이디가 중복입니다. 다른 아이디를 설정해주세요.' });
         } else {
-            const user = await user_model.createUser(id, password, name, profile_img);
+            const user = await user_model.createUser(id, hashed_password, name, profile_img, salt);
             console.log(`사용자 ${user.uid} 추가 성공`);
-            return res.status(201).json({ message : '사용자 추가에 성공했습니다.' });
+            return res.status(201).json({ 'message' : '사용자 추가에 성공했습니다.' });
         }
-        */
     } catch (err) {
-        console.log('사용자 추가 에러', err);
-        return res.status(500).json({ message : err });
+        console.log(err);
+        return res.status(500).json({ 'message' : err });
+    }
+}
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await user_model.getAllUsers();
+        console.log('유저 목록 불러오기 성공');
+        const obj = JSON.parse(JSON.stringify(users));
+        return res.status(200).json({ 'users' : obj, 'message' : '유저 목록을 성공적으로 불러왔습니다.' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ 'users' : [], 'message' : err });
+    }
+}
+
+export const getOnlineUsers = async (req, res) => {
+    try {
+        const users = await user_model.getOnlineUsers();
+        console.log('유저 목록 불러오기 성공');
+        const obj = JSON.parse(JSON.stringify(users));
+        return res.status(200).json({ 'users' : obj, 'message' : '유저 목록을 성공적으로 불러왔습니다.' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ 'users' : [], 'message' : err });
+    }
+}
+
+// 소켓 연결 상태가 바뀔 때마다 호출
+export const updateUserStatus = async (uid, status) => {
+    try {
+        const user = await user_model.updateUserStatus(uid, status);
+        console.log(`유저 ${user.uid} 상태 업데이트 성공 : ${user.status}`);
+    } catch (err) {
+        console.log(err);
     }
 }

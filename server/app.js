@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import web_socket from './utils/web_socket.js';
 import database from './database.js';
 import route_loader from './routes/route_loader.js';
 dotenv.config();
@@ -26,12 +27,5 @@ const server = createServer(app).listen(app.get('port'), () => {
     database.init();
 });
 
-const io = new Server(server);
-
-io.sockets.on('connection', (socket) => {
-    console.log(`소켓 연결 : ${socket.id}`)
-
-    socket.on('disconnect', () => {
-        console.log(`소켓 연결 해제 : ${socket.id}`)
-    })
-});
+global.io = new Server(server);
+global.io.on('connection', web_socket.connection);

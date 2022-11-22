@@ -5,7 +5,8 @@ const userSchema = new mongoose.Schema({
     hashed_password : { type : String, required : true },
     name : { type : String, required : true },
     profile_img : { type : String, required : true },   // 이미지가 아닌 서버상의 이미지 경로를 저장
-    salt : { type : String, required : true }
+    salt : { type : String, required : true },
+    status : { type : String, enum : [ 'ONLINE', 'OFFLINE' ], default : () => 'ONLINE' }
 }, {
     timestamps : true,
     collection : 'users'
@@ -13,10 +14,10 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.createUser = async function (id, hashed_password, name, profile_img, salt) {
     try {
-        const user = await this.create({ 'uid' : id, 'hashed_password' : hashed_password, 'name' : name, 'profile_img' : profile_img, 'salt' : salt });
+        const user = await this.create({ uid : id, hashed_password : hashed_password, name : name, profile_img : profile_img, salt : salt });
         return user;
     } catch (err) {
-        throw err;
+        throw 'createUser 에러 : ' + err;
     }
 }
 
@@ -25,7 +26,46 @@ userSchema.statics.getUserById = async function (id) {
         const user = await this.findOne({ uid : id });
         return user;
     } catch (err) {
-        throw err;
+        throw 'getUserById 에러 : ' + err;
+    }
+}
+
+userSchema.statics.getAllUsers = async function () {
+    try {
+        const users = await this.find({}, {
+            _id : 0,
+            uid : 1,
+            name : 1,
+            profile_img : 1,
+        });
+        return users;
+    } catch (err) {
+        throw 'getAllUsers 에러 : ' + err;
+    }
+}
+
+userSchema.statics.getOnlineUsers = async function () {
+    try {
+        const users = await this.find({ status : 'ONLINE' }, {
+            _id : 0,
+            uid : 1,
+            name : 1,
+            profile_img : 1,
+        });
+        return users;
+    } catch (err) {
+        throw 'getOnlineUsers 에러 : ' + err;
+    }
+}
+
+userSchema.statics.updateUserStatus = async function (id, status) {
+    try {
+        const user = await this.findOneAndUpdate(
+            { uid : id }, { $set : { status : status }}, { new : true }
+        );
+        return user;
+    } catch (err) {
+        throw 'updateUserStatus 에러 : ' + err;
     }
 }
 
