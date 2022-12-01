@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import path from 'path';
 import web_socket from './utils/web_socket.js';
 import database from './database.js';
 import route_loader from './routes/route_loader.js';
@@ -14,6 +15,7 @@ const app = express();
 // 서버 포트 설정
 app.set('port', process.env.SERVER_PORT);
 
+app.use(express.static(path.resolve())) 
 app.use(bodyParser.urlencoded({ extended : true }));
 app.use(bodyParser.json());
 app.use(cookieParser());

@@ -130,6 +130,9 @@ export const getAllUsers = async (req, res) => {
 export const getOnlineUsers = async (req, res) => {
     try {
         const users = await user_model.getOnlineUsers();
+        for (let i = 0; i < users.length; i++) {
+            users[i].profile_img = process.env.IP_ADDRESS + users[i].profile_img
+        }
         console.log('유저 목록 불러오기 성공');
         const obj = JSON.parse(JSON.stringify(users));
         return res.status(200).json({ 'users' : obj, 'message' : '유저 목록을 성공적으로 불러왔습니다.' });
