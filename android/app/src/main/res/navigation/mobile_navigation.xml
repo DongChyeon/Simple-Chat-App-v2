@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_user">
+
+    <fragment
+        android:id="@+id/navigation_user"
+        android:name="com.dongchyeon.simplechatapp_v2.presentation.ui.UserFragment"
+        android:label="유저"
+        tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/navigation_chat"
+        android:name="com.dongchyeon.simplechatapp_v2.presentation.ui.ChatFragment"
+        android:label="채팅"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.dongchyeon.simplechatapp_v2.presentation.ui.ProfileFragment"
+        android:label="프로필"
+        tools:layout="@layout/fragment_profile" />
+
+</navigation>

@@ -13,11 +13,21 @@
         <item name="android:fontFamily">@font/notosanskr_font_family</item>
         <item name="android:includeFontPadding">false</item>
     </style>
+
     <style name="radioButtonFontStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
         <item name="android:fontFamily">@font/notosanskr_font_family</item>
         <item name="android:includeFontPadding">false</item>
     </style>
+
     <style name="checkboxFontStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/notosanskr_font_family</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="bottomNavigationViewStyle">
+        <item name="android:background">@color/black</item>
+        <item name="itemIconTint">@drawable/selector_bottom_navigation</item>
+        <item name="itemTextColor">@drawable/selector_bottom_navigation</item>
         <item name="android:fontFamily">@font/notosanskr_font_family</item>
         <item name="android:includeFontPadding">false</item>
     </style>

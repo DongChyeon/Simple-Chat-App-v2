@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.dongchyeon.simplechatapp_v2.presentation.viewmodel.LoginViewModel" />
@@ -86,10 +85,8 @@
             android:layout_height="56dp"
             android:text="로그인"
             android:textSize="18sp"
-            android:textStyle="normal"
-            android:onClick="@{() -> viewModel.login(idEdit.getText().toString(), pwEdit.getText().toString())}" />
+            android:textStyle="normal" />
     </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

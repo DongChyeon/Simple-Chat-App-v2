@@ -2,10 +2,15 @@ package com.dongchyeon.simplechatapp_v2.presentation.di
 
 import com.dongchyeon.simplechatapp_v2.BuildConfig
 import com.dongchyeon.simplechatapp_v2.data.api.AuthService
+import com.dongchyeon.simplechatapp_v2.data.api.UserService
 import com.dongchyeon.simplechatapp_v2.data.datasource.AuthDataSource
 import com.dongchyeon.simplechatapp_v2.data.datasource.AuthDataSourceImpl
+import com.dongchyeon.simplechatapp_v2.data.datasource.UserDataSource
+import com.dongchyeon.simplechatapp_v2.data.datasource.UserDataSourceImpl
 import com.dongchyeon.simplechatapp_v2.data.repository.AuthRepository
 import com.dongchyeon.simplechatapp_v2.data.repository.AuthRepositoryImpl
+import com.dongchyeon.simplechatapp_v2.data.repository.UserRepository
+import com.dongchyeon.simplechatapp_v2.data.repository.UserRepositoryImpl
 import com.dongchyeon.simplechatapp_v2.util.exception.ResultCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -54,6 +59,12 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    fun provideUserService(retrofit: Retrofit): UserService {
+        return retrofit.create(UserService::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Singleton
@@ -67,7 +78,22 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    fun providesUserDataSource(
+        userService: UserService,
+        dispatcher: CoroutineDispatcher
+    ): UserDataSource {
+        return UserDataSourceImpl(userService, dispatcher)
+    }
+
+    @Singleton
+    @Provides
     fun providesAuthRepository(authDataSource: AuthDataSource): AuthRepository {
         return AuthRepositoryImpl(authDataSource)
+    }
+
+    @Singleton
+    @Provides
+    fun providesUserRepository(userDataSource: UserDataSource): UserRepository {
+        return UserRepositoryImpl(userDataSource)
     }
 }

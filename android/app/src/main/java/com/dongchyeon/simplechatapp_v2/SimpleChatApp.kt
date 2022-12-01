@@ -5,4 +5,10 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class SimpleChatApp : Application() {
+
+    companion object {
+        lateinit var token: String
+        lateinit var uid: String
+    }
+
 }

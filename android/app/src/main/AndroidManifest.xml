@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".SimpleChatApp"
         android:allowBackup="true"
@@ -14,6 +16,14 @@
         android:theme="@style/Theme.SimpleChatAppv2"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity
+            android:name=".presentation.ui.MainActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
@@ -25,7 +35,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".presentation.ui.SignupActivity"></activity>
+        <activity android:name=".presentation.ui.SignupActivity" />
         <activity
             android:name=".presentation.ui.LoginActivity"
             android:exported="true">

@@ -1,5 +1,6 @@
 package com.dongchyeon.simplechatapp_v2.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dongchyeon.simplechatapp_v2.domain.SignupUseCase
@@ -33,7 +34,11 @@ class SignupViewModel @Inject constructor(
         data["password"] = password.toRequestBody("text/plain".toMediaTypeOrNull())
         data["name"] = name.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        signupUseCase(data, body)
+        signupUseCase(data, body).onSuccess {
+            Log.d("signup", it.toString())
+        }.onFailure {
+            Log.d("error", it.toString())
+        }
     }
 
 }

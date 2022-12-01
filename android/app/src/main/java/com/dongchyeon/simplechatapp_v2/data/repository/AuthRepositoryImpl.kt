@@ -20,4 +20,5 @@ class AuthRepositoryImpl @Inject constructor(
         profile_img: MultipartBody.Part
     ): Result<SignupRes> =
         authDataSource.signup(data, profile_img)
+
 }
