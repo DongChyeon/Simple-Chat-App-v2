@@ -4,17 +4,25 @@ const userSchema = new mongoose.Schema({
     uid : { type : String, required : true, unique : true },
     hashed_password : { type : String, required : true },
     name : { type : String, required : true },
+    intro_msg : { type : String, required : true },
     profile_img : { type : String, required : true },   // 이미지가 아닌 서버상의 이미지 경로를 저장
-    salt : { type : String, required : true },
-    status : { type : String, enum : [ 'ONLINE', 'OFFLINE' ], default : () => 'ONLINE' }
+    status : { type : String, enum : [ 'ONLINE', 'OFFLINE' ], default : () => 'ONLINE' },
+    salt : { type : String, required : true }
 }, {
     timestamps : true,
     collection : 'users'
 })
 
-userSchema.statics.createUser = async function (id, hashed_password, name, profile_img, salt) {
+userSchema.statics.createUser = async function (id, hashed_password, name, intro_msg, profile_img, salt) {
     try {
-        const user = await this.create({ uid : id, hashed_password : hashed_password, name : name, profile_img : profile_img, salt : salt });
+        const user = await this.create({ 
+            uid : id, 
+            hashed_password : hashed_password, 
+            name : name,
+            intro_msg : intro_msg,
+            profile_img : profile_img,
+            salt : salt
+        });
         return user;
     } catch (err) {
         throw 'createUser 에러 : ' + err;
@@ -36,7 +44,8 @@ userSchema.statics.getAllUsers = async function () {
             _id : 0,
             uid : 1,
             name : 1,
-            profile_img : 1,
+            intro_msg : 1,
+            profile_img : 1
         });
         return users;
     } catch (err) {
@@ -50,7 +59,8 @@ userSchema.statics.getOnlineUsers = async function () {
             _id : 0,
             uid : 1,
             name : 1,
-            profile_img : 1,
+            intro_msg : 1,
+            profile_img : 1
         });
         return users;
     } catch (err) {

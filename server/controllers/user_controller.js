@@ -49,7 +49,7 @@ const authUser = async (id, password) => {
 const createToken = async (id) => {
     return await new Promise((resolve, reject) => {
         jsonwebtoken.sign(
-            { id }, 
+            { uid : id }, 
             process.env.ACCESS_TOKEN_SECRET, 
             { expiresIn : '1d' },
             (err, token) => {
@@ -95,6 +95,7 @@ export const signup = async (req, res) => {
         const id = req.body.id;
         const password = req.body.password;
         const name = req.body.name;
+        const intro_msg = req.body.intro_msg;
         const profile_img = req.file.path;
 
         const salt = await createSalt();
@@ -105,7 +106,7 @@ export const signup = async (req, res) => {
             console.log(`사용자 id ${dupUser.uid} 가 중복입니다.`);
             return res.status(409).json({ 'message' : '아이디가 중복입니다. 다른 아이디를 설정해주세요.' });
         } else {
-            const user = await user_model.createUser(id, hashed_password, name, profile_img, salt);
+            const user = await user_model.createUser(id, hashed_password, name, intro_msg, profile_img, salt);
             console.log(`사용자 ${user.uid} 추가 성공`);
             return res.status(201).json({ 'message' : '사용자 추가에 성공했습니다.' });
         }
@@ -127,9 +128,25 @@ export const getAllUsers = async (req, res) => {
     }
 }
 
+export const getUserById = async (req, res) => {
+    try {
+        const uid = req.params.uid;
+        var user = await user_model.getUserById(uid);
+        user.profile_img = process.env.IP_ADDRESS + user.profile_img;
+        console.log('유저 정보 불러오기 성공');
+        const obj = JSON.parse(JSON.stringify([user]));
+        return res.status(200).json({ 'users' : obj, 'message' : '유저 프로필을 성공적으로 불러왔습니다.'});
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ 'users' : [], 'message' : err });
+    }
+}
+
+// 본인을 제외한 접속 중인 유저를 보여줌
 export const getOnlineUsers = async (req, res) => {
     try {
-        const users = await user_model.getOnlineUsers();
+        var users = await user_model.getOnlineUsers();
+        users = users.filter(user => user.uid != req.tokenInfo.uid)
         for (let i = 0; i < users.length; i++) {
             users[i].profile_img = process.env.IP_ADDRESS + users[i].profile_img
         }
