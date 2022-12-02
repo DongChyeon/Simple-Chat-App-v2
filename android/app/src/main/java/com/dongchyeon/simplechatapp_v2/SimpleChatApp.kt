@@ -7,8 +7,8 @@ import dagger.hilt.android.HiltAndroidApp
 class SimpleChatApp : Application() {
 
     companion object {
-        lateinit var token: String
-        lateinit var uid: String
+        var TOKEN: String = ""
+        lateinit var UID: String
     }
 
 }

@@ -1,6 +1,7 @@
 package com.dongchyeon.simplechatapp_v2.presentation.di
 
 import com.dongchyeon.simplechatapp_v2.BuildConfig
+import com.dongchyeon.simplechatapp_v2.SimpleChatApp.Companion.TOKEN
 import com.dongchyeon.simplechatapp_v2.data.api.AuthService
 import com.dongchyeon.simplechatapp_v2.data.api.UserService
 import com.dongchyeon.simplechatapp_v2.data.datasource.AuthDataSource
@@ -18,6 +19,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -32,9 +34,17 @@ object NetworkModule {
     @Provides
     fun providesOkHttpClient() = if (BuildConfig.DEBUG) {
         val loggingInterceptor = HttpLoggingInterceptor()
+        val headerInterceptor = Interceptor {
+            val request = it.request()
+                .newBuilder()
+                .addHeader("token", TOKEN)
+                .build()
+            return@Interceptor it.proceed(request)
+        }
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(headerInterceptor)
             .build()
     } else {
         OkHttpClient.Builder().build()

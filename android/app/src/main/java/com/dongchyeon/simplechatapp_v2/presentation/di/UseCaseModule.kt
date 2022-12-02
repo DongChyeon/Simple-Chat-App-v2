@@ -3,6 +3,7 @@ package com.dongchyeon.simplechatapp_v2.presentation.di
 import com.dongchyeon.simplechatapp_v2.data.repository.AuthRepository
 import com.dongchyeon.simplechatapp_v2.data.repository.UserRepository
 import com.dongchyeon.simplechatapp_v2.domain.GetOnlineUsersUseCase
+import com.dongchyeon.simplechatapp_v2.domain.GetProfileUseCase
 import com.dongchyeon.simplechatapp_v2.domain.LoginUseCase
 import com.dongchyeon.simplechatapp_v2.domain.SignupUseCase
 import dagger.Module
@@ -31,6 +32,12 @@ object UseCaseModule {
     @Provides
     fun providesGetOnlineUsersCaseUse(userRepository: UserRepository): GetOnlineUsersUseCase {
         return GetOnlineUsersUseCase(userRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providesGetProfileCaseUse(userRepository: UserRepository): GetProfileUseCase {
+        return GetProfileUseCase(userRepository)
     }
 
 }

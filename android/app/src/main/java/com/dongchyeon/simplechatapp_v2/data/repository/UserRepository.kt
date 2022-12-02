@@ -6,4 +6,6 @@ interface UserRepository {
 
     suspend fun getOnlineUsers(): Result<UserRes>
 
+    suspend fun getProfile(uid: String): Result<UserRes>
+
 }

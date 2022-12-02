@@ -12,7 +12,6 @@ import com.dongchyeon.simplechatapp_v2.presentation.ui.base.BaseFragment
 import com.dongchyeon.simplechatapp_v2.presentation.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
     private val userViewModel: UserViewModel by viewModels()

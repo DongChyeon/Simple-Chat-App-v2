@@ -16,4 +16,9 @@ class UserDataSourceImpl @Inject constructor(
             return@withContext userService.getOnlineUsers()
         }
 
+    override suspend fun getProfile(uid: String): Result<UserRes> =
+        withContext(ioDispatcher) {
+            return@withContext userService.getProfile(uid)
+        }
+
 }

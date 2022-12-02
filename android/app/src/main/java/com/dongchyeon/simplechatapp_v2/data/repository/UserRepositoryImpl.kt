@@ -11,4 +11,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getOnlineUsers(): Result<UserRes> =
         userDataSource.getOnlineUsers()
 
+    override suspend fun getProfile(uid: String): Result<UserRes> =
+        userDataSource.getProfile(uid)
+
 }

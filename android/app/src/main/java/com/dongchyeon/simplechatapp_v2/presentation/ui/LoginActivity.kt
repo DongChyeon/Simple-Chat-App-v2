@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import com.dongchyeon.simplechatapp_v2.R
-import com.dongchyeon.simplechatapp_v2.SimpleChatApp.Companion.uid
 import com.dongchyeon.simplechatapp_v2.databinding.ActivityLoginBinding
 import com.dongchyeon.simplechatapp_v2.presentation.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +36,6 @@ class LoginActivity : AppCompatActivity() {
 
             loginViewModel.isLoggedIn.observe(this) { success ->
                 if (success) {
-                    uid = binding.idEdit.text.toString()
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {

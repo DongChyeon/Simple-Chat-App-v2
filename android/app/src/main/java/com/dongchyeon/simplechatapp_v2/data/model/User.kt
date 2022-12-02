@@ -7,6 +7,8 @@ data class User(
     val uid: String,
     @SerializedName("name")
     val name: String,
+    @SerializedName("intro_msg")
+    val introMsg: String,
     @SerializedName("profile_img")
     val profileImg: String
 )

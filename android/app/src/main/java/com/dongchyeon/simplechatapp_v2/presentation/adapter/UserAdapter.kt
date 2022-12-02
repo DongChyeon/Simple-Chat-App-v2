@@ -28,6 +28,7 @@ class UserAdapter(private val context: Context) :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nameText = itemView.findViewById<TextView>(R.id.nameText)
+        private val introMsgText = itemView.findViewById<TextView>(R.id.introMsgText)
         private val profileImg = itemView.findViewById<ImageView>(R.id.profileImgView)
 
         companion object {
@@ -40,6 +41,7 @@ class UserAdapter(private val context: Context) :
 
         fun bind(item: User, context: Context) {
             nameText.text = item.name
+            introMsgText.text = item.introMsg
             Glide
                 .with(context)
                 .load(item.profileImg)
