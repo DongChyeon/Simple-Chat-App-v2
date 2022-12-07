@@ -32,6 +32,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -41,11 +42,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-            <ImageView
-                android:id="@+id/profileImgView"
-                android:layout_width="192dp"
-                android:layout_height="192dp"
-                tools:src="@tools:sample/avatars" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/profileImgView"
+                    android:layout_width="192dp"
+                    android:layout_height="192dp"
+                    tools:src="@tools:sample/avatars" />
+
+                <ImageButton
+                    android:id="@+id/profileImgEditBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    app:srcCompat="@android:drawable/ic_menu_edit"
+                    android:visibility="invisible" />
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/nameText"
@@ -54,8 +68,19 @@
                 android:layout_marginTop="@dimen/spacing_m"
                 android:layout_marginBottom="@dimen/spacing_m"
                 android:text="이름"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/nameEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginTop="@dimen/spacing_m"
+                android:layout_marginBottom="@dimen/spacing_m"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/introMsgText"
@@ -64,8 +89,39 @@
                 android:background="@drawable/gray_lined_rounded_rectangle"
                 android:padding="@dimen/spacing_s"
                 android:text="상태메시지"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/introMsgEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:background="@drawable/gray_lined_rounded_rectangle"
+                android:padding="@dimen/spacing_s"
+                android:text="상태메시지"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/editBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_l"
+                android:text="프로필 수정하기"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+
+            <Button
+                android:id="@+id/confirmBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_l"
+                android:text="프로필 수정 확인"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                android:visibility="gone" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

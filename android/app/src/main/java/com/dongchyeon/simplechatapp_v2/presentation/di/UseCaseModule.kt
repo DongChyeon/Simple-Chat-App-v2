@@ -2,10 +2,7 @@ package com.dongchyeon.simplechatapp_v2.presentation.di
 
 import com.dongchyeon.simplechatapp_v2.data.repository.AuthRepository
 import com.dongchyeon.simplechatapp_v2.data.repository.UserRepository
-import com.dongchyeon.simplechatapp_v2.domain.GetOnlineUsersUseCase
-import com.dongchyeon.simplechatapp_v2.domain.GetProfileUseCase
-import com.dongchyeon.simplechatapp_v2.domain.LoginUseCase
-import com.dongchyeon.simplechatapp_v2.domain.SignupUseCase
+import com.dongchyeon.simplechatapp_v2.domain.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,26 +15,27 @@ object UseCaseModule {
 
     @Singleton
     @Provides
-    fun providesLoginUseCase(authRepository: AuthRepository): LoginUseCase {
-        return LoginUseCase(authRepository)
-    }
+    fun providesLoginUseCase(authRepository: AuthRepository): LoginUseCase =
+        LoginUseCase(authRepository)
 
     @Singleton
     @Provides
-    fun providesSignupUseCase(authRepository: AuthRepository): SignupUseCase {
-        return SignupUseCase(authRepository)
-    }
+    fun providesSignupUseCase(authRepository: AuthRepository): SignupUseCase =
+        SignupUseCase(authRepository)
 
     @Singleton
     @Provides
-    fun providesGetOnlineUsersCaseUse(userRepository: UserRepository): GetOnlineUsersUseCase {
-        return GetOnlineUsersUseCase(userRepository)
-    }
+    fun providesFetchOnlineUsersUseCase(userRepository: UserRepository): FetchOnlineUsersUseCase =
+        FetchOnlineUsersUseCase(userRepository)
 
     @Singleton
     @Provides
-    fun providesGetProfileCaseUse(userRepository: UserRepository): GetProfileUseCase {
-        return GetProfileUseCase(userRepository)
-    }
+    fun providesGetProfileUseCase(userRepository: UserRepository): GetProfileUseCase =
+        GetProfileUseCase(userRepository)
+
+    @Singleton
+    @Provides
+    fun providesUpdateProfileUseCase(userRepository: UserRepository): UpdateProfileUseCase =
+        UpdateProfileUseCase(userRepository)
 
 }

@@ -67,16 +67,16 @@ class SignupActivity : AppCompatActivity() {
                     introMsgText,
                     profileImgPath
                 )
+            }
+        }
 
-                signupViewModel.isSignedUp.observe(this) { success ->
-                    if (success) {
-                        startActivity(Intent(this, LoginActivity::class.java))
-                        finish()
-                    } else {
-                        Toast.makeText(applicationContext, "회원가입 실패", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
+        signupViewModel.isSignedUp.observe(this) { success ->
+            if (success) {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            } else {
+                Toast.makeText(applicationContext, "회원가입 실패", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 

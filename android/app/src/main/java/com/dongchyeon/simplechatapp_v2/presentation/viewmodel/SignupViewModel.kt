@@ -1,6 +1,7 @@
 package com.dongchyeon.simplechatapp_v2.presentation.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +21,8 @@ class SignupViewModel @Inject constructor(
     private val signupUseCase: SignupUseCase
 ) : ViewModel() {
 
-    val isSignedUp: MutableLiveData<Boolean> = MutableLiveData()
+    private val _isSignedUp: MutableLiveData<Boolean> = MutableLiveData()
+    val isSignedUp: LiveData<Boolean> = _isSignedUp
 
     fun signup(
         id: String,
@@ -40,10 +42,10 @@ class SignupViewModel @Inject constructor(
         data["intro_msg"] = introMsg.toRequestBody("text/plain".toMediaTypeOrNull())
 
         signupUseCase(data, body).onSuccess {
-            isSignedUp.postValue(true)
+            _isSignedUp.postValue(true)
             Log.d("signup", it.toString())
         }.onFailure {
-            isSignedUp.postValue(false)
+            _isSignedUp.postValue(false)
             Log.d("error", it.toString())
         }
     }

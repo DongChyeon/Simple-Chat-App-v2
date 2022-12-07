@@ -33,15 +33,15 @@ class LoginActivity : AppCompatActivity() {
         }
         binding.loginBtn.setOnClickListener {
             loginViewModel.login(binding.idEdit.text.toString(), binding.pwEdit.text.toString())
+        }
 
-            loginViewModel.isLoggedIn.observe(this) { success ->
-                if (success) {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                } else {
-                    Toast.makeText(applicationContext, "아이디와 비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT)
-                        .show()
-                }
+        loginViewModel.isLoggedIn.observe(this) { success ->
+            if (success) {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else {
+                Toast.makeText(applicationContext, "아이디와 비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

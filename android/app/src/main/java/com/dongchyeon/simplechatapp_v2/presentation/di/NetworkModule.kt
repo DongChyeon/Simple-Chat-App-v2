@@ -5,13 +5,9 @@ import com.dongchyeon.simplechatapp_v2.SimpleChatApp.Companion.TOKEN
 import com.dongchyeon.simplechatapp_v2.data.api.AuthService
 import com.dongchyeon.simplechatapp_v2.data.api.UserService
 import com.dongchyeon.simplechatapp_v2.data.datasource.AuthDataSource
-import com.dongchyeon.simplechatapp_v2.data.datasource.AuthDataSourceImpl
 import com.dongchyeon.simplechatapp_v2.data.datasource.UserDataSource
-import com.dongchyeon.simplechatapp_v2.data.datasource.UserDataSourceImpl
 import com.dongchyeon.simplechatapp_v2.data.repository.AuthRepository
-import com.dongchyeon.simplechatapp_v2.data.repository.AuthRepositoryImpl
 import com.dongchyeon.simplechatapp_v2.data.repository.UserRepository
-import com.dongchyeon.simplechatapp_v2.data.repository.UserRepositoryImpl
 import com.dongchyeon.simplechatapp_v2.util.exception.ResultCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -52,26 +48,23 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(BuildConfig.SERVER_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(ResultCallAdapterFactory())
             .build()
-    }
 
     @Singleton
     @Provides
-    fun providesAuthService(retrofit: Retrofit): AuthService {
-        return retrofit.create(AuthService::class.java)
-    }
+    fun providesAuthService(retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
 
     @Singleton
     @Provides
-    fun provideUserService(retrofit: Retrofit): UserService {
-        return retrofit.create(UserService::class.java)
-    }
+    fun provideUserService(retrofit: Retrofit): UserService =
+        retrofit.create(UserService::class.java)
 
     @Singleton
     @Provides
@@ -82,28 +75,24 @@ object NetworkModule {
     fun providesAuthDataSource(
         authService: AuthService,
         dispatcher: CoroutineDispatcher
-    ): AuthDataSource {
-        return AuthDataSourceImpl(authService, dispatcher)
-    }
+    ): AuthDataSource =
+        AuthDataSource(authService, dispatcher)
 
     @Singleton
     @Provides
     fun providesUserDataSource(
         userService: UserService,
         dispatcher: CoroutineDispatcher
-    ): UserDataSource {
-        return UserDataSourceImpl(userService, dispatcher)
-    }
+    ): UserDataSource =
+        UserDataSource(userService, dispatcher)
 
     @Singleton
     @Provides
-    fun providesAuthRepository(authDataSource: AuthDataSource): AuthRepository {
-        return AuthRepositoryImpl(authDataSource)
-    }
+    fun providesAuthRepository(authDataSource: AuthDataSource): AuthRepository =
+        AuthRepository(authDataSource)
 
     @Singleton
     @Provides
-    fun providesUserRepository(userDataSource: UserDataSource): UserRepository {
-        return UserRepositoryImpl(userDataSource)
-    }
+    fun providesUserRepository(userDataSource: UserDataSource): UserRepository =
+        UserRepository(userDataSource)
 }

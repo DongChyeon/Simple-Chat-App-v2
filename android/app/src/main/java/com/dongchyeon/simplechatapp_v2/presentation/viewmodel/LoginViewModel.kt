@@ -1,6 +1,7 @@
 package com.dongchyeon.simplechatapp_v2.presentation.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,16 +18,17 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
-    val isLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
+    private val _isLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
+    val isLoggedIn: LiveData<Boolean> = _isLoggedIn
 
     fun login(id: String, pw: String) = viewModelScope.launch {
         loginUseCase(LoginReq(id, pw)).onSuccess {
             TOKEN = it.token
             UID = id
-            isLoggedIn.postValue(true)
+            _isLoggedIn.postValue(true)
             Log.d("login", it.toString())
         }.onFailure {
-            isLoggedIn.postValue(false)
+            _isLoggedIn.postValue(false)
             Log.d("error", it.toString())
         }
     }

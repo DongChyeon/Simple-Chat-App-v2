@@ -25,8 +25,9 @@ class UserFragment : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
 
         val adapter = UserAdapter(requireContext())
 
-        userViewModel.users.observe(requireActivity()) { data ->
-            adapter.submitList(data)
+        userViewModel.users.observe(requireActivity()) { users ->
+            //if (!isAdded) return@observe
+            adapter.submitList(users)
         }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
