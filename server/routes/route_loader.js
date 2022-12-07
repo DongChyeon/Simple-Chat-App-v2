@@ -1,4 +1,4 @@
-import { getAllUsers, getOnlineUsers, getUserById, login, signup } from '../controllers/user_controller.js';
+import { getAllUsers, getOnlineUsers, getUserById, login, signup, updateProfile, updateProfileWithImg } from '../controllers/user_controller.js';
 import { createRoom, enterRoom, leaveRoom, getAllRooms, getRoomsByUid } from '../controllers/room_controller.js';
 import { uploadProfileImg, uploadRoomImg } from '../middlewares/multer_middleware.js';
 import { verifyToken } from '../middlewares/jwt_middleware.js';
@@ -13,6 +13,8 @@ function initRoutes(app, router) {
     router.post('/user/login', login);
     router.post('/user/signup', uploadProfileImg.single('profile_img'), signup);
     router.get('/user/:uid', verifyToken, getUserById);
+    router.put('/user/', verifyToken, updateProfile);
+    router.put('/user/img', verifyToken, uploadProfileImg.single('profile_img'), updateProfileWithImg);
     router.get('/users', verifyToken, getAllUsers);
     router.get('/users/online', verifyToken, getOnlineUsers);
     router.post('/room', verifyToken, uploadRoomImg.single('room_img'), createRoom);

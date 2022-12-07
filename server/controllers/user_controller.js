@@ -146,13 +146,48 @@ export const getUserById = async (req, res) => {
 export const getOnlineUsers = async (req, res) => {
     try {
         var users = await user_model.getOnlineUsers();
-        users = users.filter(user => user.uid != req.tokenInfo.uid)
+        users = users.filter(user => user.uid != req.tokenInfo.uid);
         for (let i = 0; i < users.length; i++) {
-            users[i].profile_img = process.env.IP_ADDRESS + users[i].profile_img
+            users[i].profile_img = process.env.IP_ADDRESS + users[i].profile_img;
         }
         console.log('유저 목록 불러오기 성공');
         const obj = JSON.parse(JSON.stringify(users));
         return res.status(200).json({ 'users' : obj, 'message' : '유저 목록을 성공적으로 불러왔습니다.' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ 'users' : [], 'message' : err });
+    }
+}
+
+export const updateProfile = async (req, res) => {
+    try {
+        const id = req.body.id;
+        const name = req.body.name;
+        const intro_msg = req.body.intro_msg;
+        
+        var user = await user_model.updateProfile(id, name, intro_msg);
+        user.profile_img = process.env.IP_ADDRESS + user.profile_img;
+        console.log('프로필 수정 성공');
+        const obj = JSON.parse(JSON.stringify([user]));
+        return res.status(200).json({ 'users' : obj, 'message' : '프로필 수정을 성공했습니다.' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ 'users' : [], 'message' : err });
+    }
+}
+
+export const updateProfileWithImg = async (req, res) => {
+    try {
+        const id = req.body.id;
+        const name = req.body.name;
+        const intro_msg = req.body.intro_msg;
+        const profile_img = req.file.path;
+        
+        var user = await user_model.updateProfileWithImg(id, name, intro_msg, profile_img);
+        user.profile_img = process.env.IP_ADDRESS + user.profile_img;
+        console.log('프로필 수정 성공');
+        const obj = JSON.parse(JSON.stringify([user]));
+        return res.status(200).json({ 'users' : obj, 'message' : '프로필 수정을 성공했습니다.' });
     } catch (err) {
         console.log(err);
         return res.status(500).json({ 'users' : [], 'message' : err });

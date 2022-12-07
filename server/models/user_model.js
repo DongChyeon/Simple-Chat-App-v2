@@ -68,10 +68,38 @@ userSchema.statics.getOnlineUsers = async function () {
     }
 }
 
+userSchema.statics.updateProfile = async function (id, name, intro_msg) {
+    try {
+        const user = await this.findOneAndUpdate(
+            { uid : id }, 
+            { $set : { name : name, intro_msg : intro_msg } }, 
+            { new : true }
+        );
+        return user;
+    } catch (err) {
+        throw 'updateProfile 에러 : ' + err;
+    }
+} 
+
+userSchema.statics.updateProfileWithImg = async function (id, name, intro_msg, profile_img) {
+    try {
+        const user = await this.findOneAndUpdate(
+            { uid : id }, 
+            { $set : { name : name, intro_msg : intro_msg, profile_img : profile_img } }, 
+            { new : true }
+        );
+        return user;
+    } catch (err) {
+        throw 'updateProfileWithImg 에러 : ' + err;
+    }
+} 
+
 userSchema.statics.updateUserStatus = async function (id, status) {
     try {
         const user = await this.findOneAndUpdate(
-            { uid : id }, { $set : { status : status }}, { new : true }
+            { uid : id }, 
+            { $set : { status : status } }, 
+            { new : true }
         );
         return user;
     } catch (err) {
