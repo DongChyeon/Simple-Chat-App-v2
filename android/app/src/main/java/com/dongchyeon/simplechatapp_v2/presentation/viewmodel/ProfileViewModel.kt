@@ -3,13 +3,13 @@ package com.dongchyeon.simplechatapp_v2.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dongchyeon.simplechatapp_v2.SimpleChatApp.Companion.UID
 import com.dongchyeon.simplechatapp_v2.data.model.User
 import com.dongchyeon.simplechatapp_v2.data.model.request.ProfileNoImgReq
 import com.dongchyeon.simplechatapp_v2.domain.GetProfileUseCase
 import com.dongchyeon.simplechatapp_v2.domain.UpdateProfileUseCase
+import com.dongchyeon.simplechatapp_v2.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -24,7 +24,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val getProfileUseCase: GetProfileUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase
-) : ViewModel() {
+) : BaseViewModel() {
     private val _mode = MutableLiveData<String>("VIEW")
     val mode: LiveData<String> = _mode
 
@@ -39,7 +39,7 @@ class ProfileViewModel @Inject constructor(
     fun getProfile(uid: String) = viewModelScope.launch {
         getProfileUseCase(uid).onSuccess {
             user = it.users[0]
-            _profile.postValue(user)
+            _profile.value = user
             Log.d("getProfile", it.toString())
         }.onFailure {
             Log.d("error", it.toString())
@@ -51,7 +51,8 @@ class ProfileViewModel @Inject constructor(
         introMsg: String
     ) = viewModelScope.launch {
         updateProfileUseCase.updateProfile(ProfileNoImgReq(UID, name, introMsg)).onSuccess {
-            _mode.postValue("VIEW")
+            _mode.value = "VIEW"
+            _toastMessage.value = "프로필 수정 성공"
             Log.d("updateProfile", it.toString())
         }.onFailure {
             Log.d("error", it.toString())
@@ -73,7 +74,8 @@ class ProfileViewModel @Inject constructor(
         data["intro_msg"] = introMsg.toRequestBody("text/plain".toMediaTypeOrNull())
 
         updateProfileUseCase.updateProfileWithImg(data, body).onSuccess {
-            _mode.postValue("VIEW")
+            _mode.value = "VIEW"
+            _toastMessage.value = "프로필 수정 성공"
             Log.d("updateProfile", it.toString())
         }.onFailure {
             Log.d("error", it.toString())
@@ -81,7 +83,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun setEditMode() {
-        _mode.postValue("EDIT")
+        _mode.value = "EDIT"
     }
 
 }

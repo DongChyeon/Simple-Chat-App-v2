@@ -1,4 +1,4 @@
-package com.dongchyeon.simplechatapp_v2.presentation.ui.base
+package com.dongchyeon.simplechatapp_v2.presentation.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,10 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
-abstract class BaseFragment<Binding : ViewDataBinding>(
+abstract class BaseFragment<B : ViewDataBinding>(
     @LayoutRes val layoutId: Int
 ) : Fragment() {
-    private var _binding: Binding? = null
+    private var _binding: B? = null
     protected val binding
         get() = _binding!!
 
@@ -31,7 +31,7 @@ abstract class BaseFragment<Binding : ViewDataBinding>(
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
-    protected inline fun bind(block: Binding.() -> Unit) {
+    protected inline fun bind(block: B.() -> Unit) {
         binding.apply(block)
     }
 

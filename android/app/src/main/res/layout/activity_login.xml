@@ -85,7 +85,8 @@
             android:layout_height="56dp"
             android:text="로그인"
             android:textSize="18sp"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            android:onClick="@{() -> viewModel.login(idEdit.getText().toString(), pwEdit.getText().toString())}" />
     </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

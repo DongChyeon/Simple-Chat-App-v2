@@ -4,7 +4,7 @@ import com.dongchyeon.simplechatapp_v2.data.api.UserService
 import com.dongchyeon.simplechatapp_v2.data.model.request.ProfileNoImgReq
 import com.dongchyeon.simplechatapp_v2.data.model.response.UserRes
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -14,15 +14,13 @@ import javax.inject.Inject
 
 class UserDataSource @Inject constructor(
     private val userService: UserService,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
-    private val updateDelay = 10000L
 
     fun fetchOnlineUsers(): Flow<Result<UserRes>> = flow {
         while (true) {
             val users = userService.getOnlineUsers()
             emit(users)
-            delay(updateDelay)
         }
     }
 

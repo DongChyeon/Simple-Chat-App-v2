@@ -13,8 +13,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -68,23 +66,13 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+    fun providesAuthDataSource(authService: AuthService): AuthDataSource =
+        AuthDataSource(authService)
 
     @Singleton
     @Provides
-    fun providesAuthDataSource(
-        authService: AuthService,
-        dispatcher: CoroutineDispatcher
-    ): AuthDataSource =
-        AuthDataSource(authService, dispatcher)
-
-    @Singleton
-    @Provides
-    fun providesUserDataSource(
-        userService: UserService,
-        dispatcher: CoroutineDispatcher
-    ): UserDataSource =
-        UserDataSource(userService, dispatcher)
+    fun providesUserDataSource(userService: UserService): UserDataSource =
+        UserDataSource(userService)
 
     @Singleton
     @Provides

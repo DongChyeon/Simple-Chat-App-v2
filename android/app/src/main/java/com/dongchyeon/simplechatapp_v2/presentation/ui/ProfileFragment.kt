@@ -3,12 +3,13 @@ package com.dongchyeon.simplechatapp_v2.presentation.ui
 import TakePictureFromCameraOrGallery
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.dongchyeon.simplechatapp_v2.R
 import com.dongchyeon.simplechatapp_v2.SimpleChatApp.Companion.UID
 import com.dongchyeon.simplechatapp_v2.databinding.FragmentProfileBinding
-import com.dongchyeon.simplechatapp_v2.presentation.ui.base.BaseFragment
+import com.dongchyeon.simplechatapp_v2.presentation.base.BaseFragment
 import com.dongchyeon.simplechatapp_v2.presentation.viewmodel.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
@@ -87,10 +88,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
             getImageContent.launch(Unit)
         }
 
-        binding.editBtn.setOnClickListener {
-            profileViewModel.setEditMode()
-        }
-
         binding.confirmBtn.setOnClickListener {
             if (newImg) {
                 profileViewModel.updateProfileWithImg(
@@ -104,6 +101,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(R.layout.fragment_p
                     binding.introMsgEdit.text.toString()
                 )
             }
+        }
+
+        profileViewModel.toastMessage.observe(requireActivity()) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
     }
 }

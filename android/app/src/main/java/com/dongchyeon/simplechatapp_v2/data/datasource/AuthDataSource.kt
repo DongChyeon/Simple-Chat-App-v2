@@ -5,6 +5,7 @@ import com.dongchyeon.simplechatapp_v2.data.model.request.LoginReq
 import com.dongchyeon.simplechatapp_v2.data.model.response.LoginRes
 import com.dongchyeon.simplechatapp_v2.data.model.response.SignupRes
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 class AuthDataSource @Inject constructor(
     private val authService: AuthService,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
     suspend fun login(loginReq: LoginReq): Result<LoginRes> =
