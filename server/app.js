@@ -30,4 +30,4 @@ const server = createServer(app).listen(app.get('port'), () => {
 });
 
 global.io = new Server(server);
-global.io.on('connection', web_socket.connection);
+global.io.on('connection', web_socket.connection.bind(web_socket));

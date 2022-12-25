@@ -4,32 +4,32 @@ class web_socket {
     online_users = [];
 
     connection(client) {
-        client.on('connect', (uid) => {
+        client.on('identity', ((uid) => {
             this.online_users.push({
                 'socketId' : client.id,
                 'uid' : uid
             });
             updateUserStatus(uid, "ONLINE");
-        });
-        client.on('disconnect', () => {
-            const uid = this.online_users.filter((user) => user.socketId === client.id).uid;
+        }).bind(this));
+        client.on('disconnect', (() => {
+            const uid = this.online_users.filter((user) => user.socketId === client.id)[0].uid;
             this.online_users = this.online_users.filter((user) => user.socketId !== client.id);
             updateUserStatus(uid, "OFFLINE");
-        });
-        client.on('subscribe', (room, otherUid = '') => {
+        }).bind(this));
+        client.on('subscribe', ((room, otherUid = '') => {
             this.subscribeOtheruser(room, otherUid);
             client.join(room);
-        });
+        }).bind(this));
         client.on('unsubscribe', (room) => {
             client.leave(room);
         });
     }
 
     subscribeOtheruser(room, otherUid) {
-        const online_usersockets = this.online_users.filter(
+        const userSockets = this.online_users.filter(
             (user) => user.uid === otherUid
         );
-        online_usersockets.map((userInfo) => {
+        userSockets.map((userInfo) => {
             const socketConn = global.io.sockets.connected(userInfo.socketId);
             if (socketConn) socketConn.join(room);
         });
